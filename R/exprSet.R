@@ -215,13 +215,13 @@
 
   setMethod("update2MIAME", "exprSet",
             function(object){
-                if (is(description(object), "MIAME"))
-                    cat("This object is up to date.\n")
-                else{
-                    cat("For now we will keep old description in the experiment title.\nConsider defining an object of class MIAME with more information\n")
-                    description(object) <- new("MIAME",title=description(object))
-                }
-                object
+              if(class(description(object))=="MIAME")
+                cat("This object is up to date.\n")
+              else{
+                cat("For now we will keep old description in the experiment title.\nConsider defining an object of class MIAME with more information\n")
+                description(object) <- new("MIAME",title=description(object))
+              }
+              object
             })
 
   ##define a generic for obtaining the data
@@ -497,54 +497,42 @@
   if( !isGeneric("split") )
     setGeneric("split")
 
-##FIXME: somehow factors are not vectors!!! this is going to cause
-##  some grief - we will need to figure out whether this is an oversight
-  setMethod("split", signature(x="exprSet", f="factor"),
-     function(x, f) 
-         .splitexprSet(x, f))
-
   setMethod("split", signature(x="exprSet", f="vector"),
-     function(x, f) 
-         .splitexprSet(x, f))
- 
-.splitexprSet = function(x, f) {
+            function(x, f) {
               lenf <- length(f)
               exs <- exprs(x)
               pD <- phenoData(x)
               aN <- annotation(x)
-##FIXME: I have commented this out and I think it is a bad idea
-##  we should not be splitting on the rows of the exprs, only on
-##the  rows of the pData - ie. only on cases
-#                if( (nrow(exs) %% lenf == 0 ) ) {
-#                  splitexprs <- lapply(split(1:nrow(exs), f),
-#                                         function(ind) exs[ind, , drop =
-#                                                           FALSE])
-#                  nsplit<-length(splitexprs)
-#                  for(i in 1:nsplit) {
-#                    ## Create the new exprSet with the same class as
-#                    ## the original one - SDR
-#                    tmp <- x
-#                    exprs(tmp) <- splitexprs[[i]]
-#                    phenoData(tmp) <- pD
-#                    annotation(tmp) <- aN
-#                    se.exprs(tmp) <- matrix(nr=0,nc=0)
-#                    description(tmp) <- new("MIAME")
-#                    notes(tmp) <- ""
-#                    splitexprs[[i]] <- tmp
-#                    rm(tmp)
-#                  }
-#                  return(splitexprs)
-#                }  ##split the expressions
+                if( (nrow(exs) %% lenf == 0 ) ) {
+                  splitexprs <- lapply(split(1:nrow(exs), f),
+                                         function(ind) exs[ind, , drop =
+                                                           FALSE])
+                  nsplit<-length(splitexprs)
+                  for(i in 1:nsplit) {
+                    ## Create the new exprSet with the same class as
+                    ## the original one - SDR
+                    tmp <- x
+                    exprs(tmp) <- splitexprs[[i]]
+                    phenoData(tmp) <- pD
+                    annotation(tmp) <- aN
+                    se.exprs(tmp) <- matrix(nr=0,nc=0)
+                    description(tmp) <- new("MIAME")
+                    notes(tmp) <- ""
+                    splitexprs[[i]] <- tmp
+                    rm(tmp)
+                  }
+                  return(splitexprs)
+                }  ##split the expressions
               if( (nrow(pData(x)) %% lenf ==0) ) {
                 npD <- split(pD, f)
-                nEx <- split(1:ncol(exs), f)
-                
+                nEx <- lapply(split(1:ncol(exs), f),
+                              function(ind) exs[,ind,drop=FALSE])
                 nsplit <- length(npD)
                 for( i in 1:nsplit) {
                   ## Create the new exprSet with the same class as
                   ## the original one - SDR
                   tmp <- x
-                  exprs(tmp) <- {function(ind) exs[,ind,drop=FALSE]} (nEx[[i]])
+                  exprs(tmp) <- nEx[[i]]
                   phenoData(tmp) <- npD[[i]]
                   annotation(tmp) <- aN
                   npD[[i]] <- tmp
@@ -554,7 +542,7 @@
               }
               else
                 stop("could not split")
-            }
+            })
 
 
   setMethod("split", signature(x="phenoData", f="vector"),
@@ -617,7 +605,7 @@
     (pData(x))[[as.character(val)]]
 
 esApply <- function(X, MARGIN, FUN, ...) {
-    if ((!is(X, "exprSet")) && (!is(X, "eSet")))
+    if (class(X) != "exprSet" && class(X) != "eSet")
         stop("arg1 must be of class exprSet")
     e1 <- new.env(parent=environment(FUN))
     multiassign(names(pData(X)), pData(X), env=e1)

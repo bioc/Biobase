@@ -230,8 +230,7 @@ setMethod("combine", c("eSet", "eSet"), function(x, y, ...)
 # exprList is a virtual class...
 #
  if (is.environment(eList(x))) stop("not currently supporting environment-valued eLists")
- if (!(any( c(is(x, class(eList(y))), is(y, class(eList(x)))) ) ) )
-     stop("not currently supporting eLists of different classes")
+ if (class(eList(x)) != class(eList(y))) stop("not currently supporting eLists of different classes")
  if (!all(names(eList(x))==names(eList(y)))) stop("eLists have different element names")
  o <- list()
  n <- names(eList(x))
