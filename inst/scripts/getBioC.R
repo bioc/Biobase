@@ -38,19 +38,9 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
         if(inherits(tryMe, "try-error")){
            messages <- c(messages, paste("Get", i, "failed"))
         }else{
-# Can not use the existing functions since they are all specific to CRAN
-#           download.packages(i,destdir, contriburl = getReposit())
-#           install.packages(i, lib = .libPaths(),contriburl = getReposit(),
-#                             destdir = destdir)
             close(tryMe)
             download.file(sourceUrl, fileName,
                          mode = getMode(PLATFORM), quiet = TRUE)
-#           temp <- packageStatus(repositories = getReposit())
-#           print(temp)
-
-#           temp <- update(temp)
-#           print(temp)
-#           upgrade(temp)
             options(show.error.messages = FALSE)
             tryMe <- try(installPack(PLATFORM, fileName))
             options(show.error.messages = TRUE)
@@ -61,6 +51,8 @@ getBioC <- function (libName = "exprs", destdir = NULL, isDevel = FALSE,
             }
         }
     }
+    if(is.null(messages))
+        messages <- "Successful"
     if(verbose)
         print(messages)
     return(invisible(messages))
@@ -95,10 +87,10 @@ getLibName <- function (platform, lib){
 getDLUrl <- function(platform, isDevel = FALSE){
     if(isDevel)
         tempUrl <-
-            "http://www.bioconductor.org/packages/distrib//devel/"
+            "http://www.bioconductor.org/packages/devel/distrib/"
     else
         tempUrl <-
-            "http://www.bioconductor.org/packages/distrib//release/"
+            "http://www.bioconductor.org/packages/release/distrib/"
     switch(platform,
             "unix" = return (paste(tempUrl, "Source", sep = "")),
             "windows" = return(paste(tempUrl,"Win32", sep = "")),
