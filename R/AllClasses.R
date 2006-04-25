@@ -142,21 +142,12 @@ setClass("eSet",
          representation(assayData = "AssayData",
                         phenoData = "AnnotatedDataFrame",
                         experimentData = "MIAME",
-                        annotation = "character",
-                        .classVersion = "character"),
+                        annotation = "character"),
          prototype = list(
            assayData = list(), # use initialize to set as env, so different instances have different envs
            phenoData = new( "AnnotatedDataFrame" ),
            experimentData = new( "MIAME" ),
-           annotation = character(),
-           .classVersion = c(
-             Rmajor=R.version$major,
-             Rminor=R.version$minor,
-             BiobaseMajor=unlist(strsplit(package.version("Biobase"),".",fixed=TRUE))[1],
-             BiobaseMinor=paste(
-               unlist(strsplit(package.version("Biobase"),".",fixed=TRUE))[2:3],
-               collapse=".")
-             )),
+           annotation = character()),
            "VIRTUAL"
 )
 setClass("ExpressionSet", contains = "eSet") # exprSet-like
