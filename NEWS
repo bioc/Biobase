@@ -21,6 +21,10 @@ BUG FIXES
     o AnnotatedDataFrame 'show' listed additional varMetadata column
       names incorrectly when labelDescription was not the first.
 
+    o combine,matrix,matrix-method would record 'NA' for entries in
+      the second matrix with niether rows nor columns present in the
+      first.
+
 NEWLY DEFUNCT CLASSES, METHODS, FUNCTIONS, DATA SETS
 
     o Defunct S4 Classes
