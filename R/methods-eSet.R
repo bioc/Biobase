@@ -184,18 +184,20 @@ setMethod("updateObject", signature(object="eSet"),
                                  featureData = annotatedDataFrameFrom(assayData(object), byrow=TRUE),
                                  experimentData = updateObject(experimentData(object), ..., verbose=verbose),
                                  annotation = annotation(object)),
-                            lapply(additionalSlots, function(x) slot(object, x))))
+                            lapply(additionalSlots,
+                                   function(x) updateObject(slot(object, x)))))
               } else if (classVersion(object)["eSet"]=="1.1.0") {
                 ## added scanDates slot
                 object <-
                   do.call(new,
                           c(list(class(object),
-                                 assayData = assayData(object),
-                                 phenoData = phenoData(object),
-                                 featureData = featureData(object),
-                                 experimentData = experimentData(object),
+                                 assayData = updateObject(assayData(object)),
+                                 phenoData = updateObject(phenoData(object)),
+                                 featureData = updateObject(featureData(object)),
+                                 experimentData = updateObject(experimentData(object)),
                                  annotation = annotation(object)),
-                            lapply(additionalSlots, function(x) slot(object, x))))
+                            lapply(additionalSlots,
+                                   function(x) updateObject(slot(object, x)))))
               } else if (classVersion(object)["eSet"]=="1.2.0") {
                 ## added protocolData slot, removed scanDates slot
                 scanDates <- object@scanDates
@@ -206,13 +208,14 @@ setMethod("updateObject", signature(object="eSet"),
                 object <-
                   do.call(new,
                           c(list(class(object),
-                                 assayData = assayData(object),
-                                 phenoData = phenoData(object),
-                                 featureData = featureData(object),
-                                 experimentData = experimentData(object),
+                                 assayData = updateObject(assayData(object)),
+                                 phenoData = updateObject(phenoData(object)),
+                                 featureData = updateObject(featureData(object)),
+                                 experimentData = updateObject(experimentData(object)),
                                  annotation = annotation(object),
                                  protocolData = protocolData),
-                            lapply(additionalSlots, function(x) slot(object, x))))
+                            lapply(additionalSlots,
+                                   function(x) updateObject(slot(object, x)))))
               }
               else {
                 stop("cannot update object of class '", class(object),
