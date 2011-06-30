@@ -17,15 +17,13 @@ biocReposList()
   The repository URLs are hardcoded for each release.
 }
 \value{
-  \item{bioc }{URL of main Bioc package repository}
-  \item{aData }{URL for Bioc annotation data package repository}
-  \item{eData }{URL for Bioc experiment data package repository}
-  \item{oh }{URL for Bioc Omegahat package repository.  This repository
-    contains the versions of Omegahat packages that were tested with the
-    current Bioc release.}
-  \item{li }{URL for Bioc Lindsey package repository.}
-  \item{cran }{URL for Bioc CRAN package repository.  This is just a
-    normal CRAN repository.}
+  \item{bioc}{URL for Bioc software package repository}
+  \item{aData}{URL for Bioc annotation data package repository}
+  \item{eData}{URL for Bioc experiment data package repository}
+  \item{extra}{URL for Bioc extra repository}
+  \item{brainarray}{URL for custom CDF and probe package repository
+               maintained by Manhong Dai from University of Michigan}
+  \item{cran}{URL for CRAN package repository.}
 }
 \author{S. Falcon}
 \examples{
