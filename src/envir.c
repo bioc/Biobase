@@ -90,7 +90,7 @@ SEXP lc_prefix(SEXP x, SEXP ignoreCase)
 
     /* init to first char in first elem. of x */
     first = CHAR(STRING_ELT(x, 0));
-    prefix = (char *)Calloc(min_nc + 1, char);
+    prefix = (char *)R_Calloc(min_nc + 1, char);
     done = 0;
     i = 0;
     while (1) {
@@ -117,7 +117,7 @@ SEXP lc_prefix(SEXP x, SEXP ignoreCase)
     }
 
     ans = mkString(prefix);
-    Free(prefix);
+    R_Free(prefix);
     UNPROTECT(1);
     return ans;
 }
